@@ -34,4 +34,31 @@ modelo_obesidade = joblib.load('models/modelo_obesidade.pkl')
 @app.route('/prever_obesidade', methods=['POST'])
 @validate()
 def predict_obesidade(body: request_boyd):
-    return
+    # Transformar body em um DataFrame
+    predict_df = pd.DataFrame([body.model_dump()], index=[1])
+
+    # Incluir a Faixa Etaria
+    bins = [10, 20, 30, 40, 50, 60, 70]
+    bins_ordinal = [0, 1, 2, 3, 4, 5]
+    predict_df['Idade_Bucket_Ordinal'] = pd.cut(predict_df['Idade'], bins=bins, labels=bins_ordinal, include_lowest=True)
+
+    # Remover as k melhroes features
+    predict_df = predict_df[[
+        'Historico_Familiar_Sobrepeso',
+        'Consumo_Alta_Caloria_Com_Frequencia',
+        'Consumo_Alimentos_entre_Refeicoes',
+        'Monitora_Calorias_Ingeridas',
+        'Nivel_Atividade_Fisica',
+        'Nivel_Uso_Tela',
+        'Transporte_Caminhada',
+        'Idade_Bucket_Ordinal'
+    ]]
+
+    # Prever a obesidade
+    y_pred = modelo_obesidade.predict(predict_df)
+
+    return jsonify({'obesidade': y_pred.tolist()})
+
+# Rodar o servidor
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
