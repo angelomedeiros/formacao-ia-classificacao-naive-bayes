@@ -18,4 +18,4 @@ Transporte_Bicicleta indica que o meio de transporte principal é Bicicleta
 Transporte_Motocicleta indica que o meio de transporte principal é Motocicleta
 Transporte_Publico indica que o meio de transporte principal é transporte público (Ônibus, Trem, Metrô)
 Transporte_Caminhada indica que o meio de transporte principal é Caminhada
-Obeso é 1 se o paciente for obeso e 0 se não for.
+Obesidade é 1 se o paciente for obeso e 0 se não for.
